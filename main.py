@@ -10,7 +10,7 @@ import os
 from env import TELEGRAM_BOT_TOKEN, OPENAI_API_KEY
 from crewai import Agent, Task, Crew
 from crewai.project import CrewBase, agent, task, crew
-
+from web_search_tool import web_search_tool
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 @CrewBase
@@ -41,8 +41,8 @@ class ChatBotCrew:
             당신은 최첨단 AI 기술과 깊이 있는 데이터 분석 능력을 겸비한 전문 정보 분석가입니다.
             어떤 질문이든 그 본질을 파악하고, 웹 검색과 같은 강력한 도구를 활용하여 사용자에게 가장 필요한 맞춤형 답변을 제공하는 것을 사명으로 삼고 있습니다.
             """,
-            llm="openai/o4-mini",
-            tools=[],
+            llm="gemini/gemini-2.0-flash-lite",
+            tools=[web_search_tool],
         )
 
     @task
