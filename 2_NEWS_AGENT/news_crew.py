@@ -2,8 +2,14 @@ from crewai import Agent, Task, Crew
 from crewai.project import CrewBase, agent, crew, task
 from env import OPENAI_API_KEY
 import os 
+import logging
+import warnings
+from tools import global_news_rss_tool, korean_news_rss_tool, web_search_tool
 
-os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
+# Config 파일 경고 억제 (config 파일 없이도 작동함)
+warnings.filterwarnings('ignore', category=UserWarning, message='.*config.*')
+
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 FETCH_NEWS_COUNT = 10
 
@@ -24,7 +30,7 @@ class NewsCrew:
             """,
             llm="openai/o4-mini",
             verbose=True,
-            tools=[],
+            tools=[global_news_rss_tool, korean_news_rss_tool],
         )
 
     @task
@@ -117,7 +123,7 @@ class NewsCrew:
             """,
             llm="openai/o4-mini",
             verbose=True,
-            tools=[],
+            tools=[web_search_tool],
         )
 
     @task
@@ -280,21 +286,23 @@ class NewsCrew:
             output_file="output/final_news_report.txt",
         )
 
-        @crew
-        def crew(self) -> Crew:
-            """Creates the News Crew"""
-            return Crew(
-                agents=[
-                    self.research_specialist_agent(),
-                    self.editor_agent(),
-                    self.curator_agent(),
-                ],
-                tasks=[
-                    self.research_global_news_task(),
-                    self.research_korea_news_task(),
-                    self.edit_and_summarize_articles_task(),
-                    self.curate_final_news_task(),
-                ],
-                verbose=True,
-            )
-        return crew()
+    @crew
+    def crew(self) -> Crew:
+        """Creates the News Crew"""
+        return Crew(
+            agents=[
+                self.research_specialist_agent(),
+                self.editor_agent(),
+                self.curator_agent(),
+            ],
+            tasks=[
+                self.research_global_news_task(),
+                self.research_korea_news_task(),
+                self.edit_and_summarize_articles_task(),
+                self.curate_final_news_task(),
+            ],
+            verbose=True,
+        )
+
+news_crew = NewsCrew()
+news_crew.crew().kickoff()
