@@ -1,0 +1,5 @@
+.DS_Store
+*.DS_Store
+uv.lock
+output/
+__pycache__/
