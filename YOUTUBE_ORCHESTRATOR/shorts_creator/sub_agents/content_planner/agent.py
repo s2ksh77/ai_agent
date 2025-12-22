@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field
 from google.adk.tools.tool_context import ToolContext
 from google.adk.agents import Agent, LoopAgent
@@ -28,7 +28,10 @@ class SceneSchema(BaseModel):
 class PlanSchema(BaseModel):
     topic: str = Field(description="쇼츠 영상의 주제")
     scenes: List[SceneSchema] = Field(description="장면의 목록")
-    total_duration: int = Field(description="총 영상 길이(초, 최대 25초)")
+    total_duration: int = Field(description="총 영상 길이(초, 10초 고정)")
+    reference_video_url: Optional[str] = Field(
+        default=None, description="참고할 레퍼런스 유튜브 쇼츠 링크(선택)"
+    )
 
 
 class CriticSchema(BaseModel):
@@ -48,6 +51,7 @@ plan_generator_agent = Agent(
 
 async def plan_is_finalized(tool_context: ToolContext):
     # 최종 기획안이 확정되었을때 이 도구를 호출해서 루프를 종료합니다.
+    tool_context.state["plan_finalized"] = True
     tool_context.actions.escalate = True  # Sub agent에서 상위 agent로 넘어가는거
     return
 

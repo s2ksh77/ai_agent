@@ -9,7 +9,7 @@ client = OpenAI()
 
 # 사용할 TTS 모델 및 음성 설정
 TTS_MODEL = "tts-1-hd"
-TTS_VOICE = "nova"
+TTS_VOICE = "alloy"
 
 AVG_WORDS_PER_SECOND = 2.5  # 한국어/영어 평균 말하기 속도
 NATURAL_SPEED_MIN = 0.9  # 자연스러운 최소 속도
