@@ -44,8 +44,8 @@ def _build_video_prompt(planner_output: dict) -> str:
     return (
         "Create a 10-second vertical 9:16 video. "
         "Follow the scene durations in the plan (e.g., 3s/3s/4s). "
-        "Show a cute or mind-blowing animal moment with cinematic realism. "
-        "Animals must act like humans (using tools, mimicking human gestures, sitting at tables) while still looking like real animals. "
+        "Show the cutest cat moment with cinematic realism. "
+        "Focus on one adorable cat behavior or reaction and keep it natural. "
         "No on-screen text or subtitles. "
         f"{summary}"
     ).strip()
